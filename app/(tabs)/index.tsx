@@ -232,7 +232,7 @@ const styles = StyleSheet.create({
     mainContainer: {
         flex: 1,
         backgroundColor: '#E8E8E8',
-        marginTop: 50,
+        marginTop: 0,
     },
     listItemButton: {
         borderRadius: 12,
