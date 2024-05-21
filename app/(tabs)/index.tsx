@@ -13,10 +13,11 @@ import { useState } from 'react';
 import { LinearGradient } from 'expo-linear-gradient';
 import LogoIcon from '@/assets/images/VendrLogo.svg';
 import ListImage from '@/assets/images/PSP.png';
+import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
+import { NavigationContainer } from '@react-navigation/native'
 
 export default function HomeScreen() {
     const navigation = useNavigation();
-    const [selectedTab, setSelectedTab] = useState(0);
     const boxWidth = Dimensions.get('window').width;
     const data = [
         {
@@ -27,7 +28,7 @@ export default function HomeScreen() {
             title1: 'Open Chats',
             messageRequests: '18',
             title2: 'Message Requests',
-            isStatus: 0,
+            status: 'Active',
         },
         {
             heading: 'PlayStation Remote Player22',
@@ -37,7 +38,7 @@ export default function HomeScreen() {
             title1: 'Open Chats',
             messageRequests: '18',
             title2: 'Message Requests',
-            isStatus: 0,
+            status: 'Active',
         },
         {
             heading: 'PlayStation 333',
@@ -47,7 +48,7 @@ export default function HomeScreen() {
             title1: 'Open Chats2',
             messageRequests: '60',
             title2: 'Message 2',
-            isStatus: 1,
+            status: 'Task',
         },
         {
             heading: 'PlayStation Remote Player',
@@ -57,7 +58,7 @@ export default function HomeScreen() {
             title1: 'Open Chats',
             messageRequests: '6',
             title2: 'Message Requests',
-            isStatus: 1,
+            status: 'Task',
         },
         {
             heading: 'PlayStation Remote Player22',
@@ -67,7 +68,7 @@ export default function HomeScreen() {
             title1: 'Open Chats2',
             messageRequests: '6',
             title2: 'Message 55',
-            isStatus: 1,
+            status: 'Task',
         },
         {
             heading: 'Last Data',
@@ -77,21 +78,31 @@ export default function HomeScreen() {
             title1: 'Open Chats2',
             messageRequests: '60',
             title2: 'Message 60',
-            isStatus: 2,
+            status: 'Task',
+        },
+        {
+            heading: 'Last Data',
+            price: '$120',
+            desc: 'or End',
+            number: '80',
+            title1: 'Open Chats2',
+            messageRequests: '60',
+            title2: 'Message 60',
+            status: 'Previous',
         },
     ];
 
-    const filterArr = () => {
-        return data.filter(obj => obj.isStatus === selectedTab);
+    const filterArr = (status: string) => {
+        return data.filter(obj => obj.status === status);
     };
 
-    const manageTitle = () => {
-        switch (selectedTab) {
-            case 0:
+    const manageTitle = (status: string) => {
+        switch (status) {
+            case 'Active':
                 return 'Active Listings';
-            case 1:
-                return 'Tasks Listings';
-            case 2:
+            case 'Task':
+                return 'Task Listings';
+            case 'Previous':
                 return 'Previous Listings';
             default:
                 return '';
@@ -99,10 +110,49 @@ export default function HomeScreen() {
     };
 
     const ListItem = () => {
-        navigation.navigate('add-item');
+        navigation.navigate('add-item', {});
     };
 
-    const renderItem = ({ item, index }) => {
+    const Tab = createMaterialTopTabNavigator();
+
+    const CustomTabBar = (props: any) => (
+        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+            <View style={styles.tabContainer}>
+                <Text style={styles.tabTextMain}>{props.count}</Text>
+                <Text style={styles.tabTextName}>{props.title}</Text>
+            </View>
+        </View>
+    );
+
+    const ListingViews = (props: any) => (
+        <View style={styles.activeContainer}>
+            <View style={styles.activeHeader}>
+                <Text style={styles.activeLabel}>{manageTitle(props.status)}</Text>
+                <View style={{ flex: 1 }} />
+                <View style={styles.filterContainer}>
+                    <Text style={styles.filterText}>Filter</Text>
+                </View>
+            </View>
+
+            {/* body Design for Active Listing */}
+
+            <View style={styles.listingBody}>
+                <FlatList
+                    data={filterArr(props.status)}
+                    showsVerticalScrollIndicator={false}
+                    renderItem={renderItem}
+                    ListFooterComponent={<View style={{ height: 100 }} />}
+                    ItemSeparatorComponent={() => (
+                        <View style={styles.itemSeparatorComponent}>
+                            <View style={styles.itemSeparatorComponentSub} />
+                        </View>
+                    )}
+                />
+            </View>
+        </View>
+    );
+
+    const renderItem = ({ item, index }: any) => {
         return (
             <View style={styles.listBody} key={index}>
                 <View>
@@ -130,6 +180,7 @@ export default function HomeScreen() {
                 </View>
 
                 <View style={{ flex: 1 }} />
+                {/* //Edit Icon */}
                 <FontAwesomeIcons
                     size={25}
                     name={'edit'}
@@ -148,16 +199,10 @@ export default function HomeScreen() {
                 end={{ x: 0, y: 1 }}
                 style={styles.gradientHeader}>
                 <View style={{ alignItems: 'center', paddingBottom: 10 }}>
-                    <LogoIcon style={{width:120, height:50 }} />
+                    <LogoIcon style={{ width: 120, height: 50 }} />
                 </View>
             </LinearGradient>
-            {/* Button Design */}
-            {/*<TouchableOpacity style={styles.listItemSub} onPress={ListItem}>*/}
-            {/*    <View style={styles.listItemButton}>*/}
-            {/*        <Text style={styles.listItemFont}>List an item</Text>*/}
-            {/*    </View>*/}
-            {/*</TouchableOpacity>*/}
-
+            {/* //List an Item Button */}
             <TouchableOpacity style={styles.touchableOpacity} onPress={ListItem}>
                 <LinearGradient
                     colors={['#26BCF2', '#82DAF9']}
@@ -170,59 +215,42 @@ export default function HomeScreen() {
                 </LinearGradient>
             </TouchableOpacity>
             {/* Tab Design */}
-
-            <View style={styles.tabView}>
-                <TouchableOpacity
-                    style={styles.tabContainer}
-                    onPress={() => setSelectedTab(0)}>
-                    <Text style={styles.tabTextMain}>9</Text>
-                    <Text style={styles.tabTextName}>Active</Text>
-                    {selectedTab === 0 ? <View style={styles.tabLine} /> : null}
-                </TouchableOpacity>
-
-                <TouchableOpacity
-                    style={styles.tabContainer}
-                    onPress={() => setSelectedTab(1)}>
-                    <Text style={styles.tabTextMain}>9</Text>
-                    <Text style={styles.tabTextName}>Tasks</Text>
-                    {selectedTab === 1 ? <View style={styles.tabLine} /> : null}
-                </TouchableOpacity>
-
-                <TouchableOpacity
-                    style={styles.tabContainer}
-                    onPress={() => setSelectedTab(2)}>
-                    <Text style={styles.tabTextMain}>9</Text>
-                    <Text style={styles.tabTextName}>Previous</Text>
-                    {selectedTab === 2 ? <View style={styles.tabLine} /> : null}
-                </TouchableOpacity>
-            </View>
-
-            {/* Heading Design for Active Listing */}
-            <View style={styles.activeContainer}>
-                <View style={styles.activeHeader}>
-                    <Text style={styles.activeLabel}>{manageTitle()}</Text>
-                    <View style={{ flex: 1 }} />
-                    <View style={styles.filterContainer}>
-                        <Text style={styles.filterText}>Filter</Text>
-                    </View>
-                </View>
-
-                {/* body Design for Active Listing */}
-
-                <View style={styles.listingBody}>
-                    <FlatList
-                        data={filterArr()}
-                        showsVerticalScrollIndicator={false}
-                        renderItem={renderItem}
-                        ListFooterComponent={<View style={{ height: 100 }} />}
-                        ItemSeparatorComponent={() => (
-                            <View style={styles.itemSeparatorComponent}>
-                                <View style={styles.itemSeparatorComponentSub} />
-                            </View>
-                        )}
-                    />
-                </View>
-            </View>
+            <Tab.Navigator
+                screenOptions={{
+                    tabBarStyle: styles.tabView,
+                }}
+            >
+                <Tab.Screen
+                    name="Active"
+                    options={{
+                        tabBarLabel: () => (
+                            <CustomTabBar count={filterArr('Active').length} title='Active' />
+                        ),
+                    }}
+                >
+                    {() => <ListingViews status='Active' />}
+                </Tab.Screen>
+                <Tab.Screen
+                    name="Task"
+                    options={{
+                        tabBarLabel: () => (
+                            <CustomTabBar count={filterArr('Task').length} title='Task' />
+                        ),
+                    }}
+                >
+                    {() => <ListingViews status='Task' />}
+                </Tab.Screen>
+                <Tab.Screen
+                    name="Previous"
+                    options={{
+                        tabBarLabel: () => (
+                            <CustomTabBar count={filterArr('Previous').length} title='Previous' />
+                        ),
+                    }}
+                >
+                    {() => <ListingViews status='Previous' />}
+                </Tab.Screen>
+            </Tab.Navigator>
         </View>
     );
 }
@@ -250,7 +278,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     tabView: {
-        flexDirection: 'row',
+        flexDirection: 'column',
         justifyContent: 'space-between',
         marginHorizontal: 26,
         marginTop: 10,
