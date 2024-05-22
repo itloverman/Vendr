@@ -11,9 +11,9 @@ import { useNavigation } from '@react-navigation/native';
 import FontAwesomeIcons from '@expo/vector-icons/FontAwesome';
 import { useState } from 'react';
 import { LinearGradient } from 'expo-linear-gradient';
-import LogoIcon from '@/assets/images/VendrLogo.svg';
+import LogoIcon from '../../assets/images/VendrLogo.svg';
 import ListImage from '@/assets/images/PSP.png';
-import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
+import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs/';
 
 export default function HomeScreen() {
     const navigation = useNavigation();
@@ -109,7 +109,7 @@ export default function HomeScreen() {
     };
 
     const ListItem = () => {
-        navigation.navigate('add-item', {});
+        navigation.navigate('add-item' as never );
     };
 
     const Tab = createMaterialTopTabNavigator();
