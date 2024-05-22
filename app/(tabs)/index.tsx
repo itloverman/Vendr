@@ -222,6 +222,7 @@ export default function HomeScreen() {
                         width: 70,
                         marginHorizontal: 26,
                     },
+                    tabBarPressColor: "transparent"
                 }}
             >
                 <Tab.Screen
