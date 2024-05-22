@@ -13,7 +13,7 @@ import { useState } from 'react';
 import { LinearGradient } from 'expo-linear-gradient';
 import LogoIcon from '../../assets/images/VendrLogo.svg';
 import ListImage from '@/assets/images/PSP.png';
-import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs/';
+import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 
 export default function HomeScreen() {
     const navigation = useNavigation();
@@ -155,7 +155,7 @@ export default function HomeScreen() {
         return (
             <View style={styles.listBody} key={index}>
                 <View>
-                    <Image source={require('@/assets/images/PSP.png')} style={styles.listImages} />
+                    <Image source={ListImage} style={styles.listImages} />
                 </View>
                 <View style={{ flexDirection: 'column' }}>
                     <Text style={styles.listBodyHeading}>{item?.heading}</Text>
