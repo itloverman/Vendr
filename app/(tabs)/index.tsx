@@ -14,7 +14,6 @@ import { LinearGradient } from 'expo-linear-gradient';
 import LogoIcon from '@/assets/images/VendrLogo.svg';
 import ListImage from '@/assets/images/PSP.png';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
-import { NavigationContainer } from '@react-navigation/native'
 
 export default function HomeScreen() {
     const navigation = useNavigation();
@@ -218,6 +217,11 @@ export default function HomeScreen() {
             <Tab.Navigator
                 screenOptions={{
                     tabBarStyle: styles.tabView,
+                    tabBarIndicatorStyle: {
+                        backgroundColor: '#26BCF2',
+                        width: 70,
+                        marginHorizontal: 26,
+                    },
                 }}
             >
                 <Tab.Screen
@@ -282,9 +286,14 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         marginHorizontal: 26,
         marginTop: 10,
+        backgroundColor: '#E8E8E8',
+        shadowColor: 'rgba(0,0,0, .2)',
+        shadowOffset: { height: 0, width: 0 },
+        shadowOpacity: 0, //default is 1
+        shadowRadius: 0,//default is 1
     },
     tabContainer: {
-        marginBottom: 18,
+        // marginBottom: 18,
         alignItems: 'center',
     },
     tabTextMain: {
@@ -307,7 +316,10 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: 'white',
         borderRadius: 21,
-        marginBottom: 5,
+        marginBottom: 10,
+        marginTop:20,
+        marginLeft:5,
+        marginRight: 5,
     },
     activeHeader: {
         flexDirection: 'row',
